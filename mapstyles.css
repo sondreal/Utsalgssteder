@@ -1,0 +1,140 @@
+#ol_search {
+  width: 100%;
+  display: flex;
+}
+
+#ol_search * {
+  font-family: 'Open Sans', 'Trebuchet MS', Helvetica, sans-serif;
+}
+
+.ols_shadow {
+  -webkit-box-shadow: 1px 1px 10px 0px rgba(50, 50, 50, 0.3);
+  -moz-box-shadow:    1px 1px 10px 0px rgba(50, 50, 50, 0.3);
+  box-shadow:         1px 1px 10px 0px rgba(50, 50, 50, 0.3);
+}
+
+.ols_header {
+  
+  margin: 0 20px 0 0;
+  text-transform: uppercase;
+  height: 65px;
+  line-height: 60px;
+}
+
+.ols_searchfield_container {
+  flex-grow: 1; 
+}
+
+.ols_searchfield {
+  display: flex; 
+  height: 65px;
+}
+
+.ols_searchfield input {
+  flex-grow: 1;
+  border: none;
+  font-size: 25px;
+  background-color: transparent;
+}
+.ols_searchfield a {
+  height: 100%;
+  width: 100px;
+  text-transform: uppercase;
+  font-size: 25px;
+  line-height: 63px;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.ols_searchfield a:hover {
+  color: green;
+}
+
+.ols_jslocator {
+  display: block;  
+  margin-top: 15px;
+  text-align: right;
+}
+
+.ols_jslocator a {
+  display:inline-block;
+  padding: 10px;
+  text-align: center;
+}
+.ols_jslocator a:hover {
+  color: green;
+}
+
+.ols_hr {
+  margin-top: 20px;
+}
+
+#ol_mapcontainer {
+  position: relative;
+  margin-top: -110px;
+  width: 100%;
+  height: 650px;
+}
+
+.olm_map {
+  width: 100%;
+  height: 100%;
+}
+
+.ols_legend { display: none; }
+
+@media all and (max-width: 1000px) {
+  .ols_searchfield input {
+    font-size: 15px;
+  }
+  #ol_search {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .ols_jslocator {
+    padding-right: 10px;
+  }
+}
+
+@media all and (max-width: 600px) {
+  #ol_search {
+    display: block;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .ols_jslocator {
+    padding-right: 10px;
+  }
+}
+
+  
+  
+.ol_ip_header {
+  font-size: 20px;
+  font-weight:bold;
+  font-family: 'Open Sans', 'Trebuchet MS', Helvetica, sans-serif;
+
+}
+.ol_ip_hr {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.ol_ip_content * {
+  font-family: 'Open Sans', 'Trebuchet MS', Helvetica, sans-serif;
+}
+.ol_ip_content h2 {
+  font-size: 17px;
+  margin-bottom: 0px;
+}
+
+.ol_ip_content a {
+  text-decoration: underline;
+}
+
+.ol_ip_content p {
+  font-size: 14px;
+}
+ 
+
