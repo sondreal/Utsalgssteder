@@ -118,8 +118,8 @@ if($step == 2) {
   $outlets_with_sales = array();
   foreach($csv as $line) {
     $data = str_getcsv($line, ";");
- 
     $store = trim($data[3]);
+	  /* LINE 123 PRINTS CORRECT VALUE */
     $bilde = trim($data[1]);
     $address = trim($data[9]);
     $postalplace = trim($data[10]);
@@ -128,7 +128,7 @@ if($step == 2) {
     $product = trim($data[6]);
     if($dpack > 0) {
       if(!isset($outlets_with_sales[$store]))
-        $outlets_with_sales[$store] = array($bilde, $address, $postalplace, $country, array($product=>$dpack));
+        $outlets_with_sales[$store] = array($address, $postalplace, $country, $bilde, array($product=>$dpack));
       else 
         $outlets_with_sales[$store][3][$product] = $dpack;
     }
@@ -139,12 +139,11 @@ if($step == 2) {
   $sqls = array();
   foreach($outlets_with_sales as $k=>$v) {
     $products = "";
-	$bilde = trim($data[1]);
-    foreach($v[3] as $prod=>$dpak) $products .= $prod.",";
+	print_r($v);
+    foreach($v[4] as $prod=>$dpak) $products .= $prod.",";
     $products = substr($products,0,-1);      
-
     $longitude = $latitude = $last_updated = $formatted_address = $geocoding = "";
-
+	
     // Check if cached outlets is saved for this store, to get lat + long
     if(isset($cached_outlets[$k."-".$v['0']])) {
       $tmp = $cached_outlets[$k."-".$v['0']];
@@ -156,7 +155,7 @@ if($step == 2) {
     }
     
     // Generate SQL and query
-    $sqls[] = 'INSERT INTO '.$table_name.'(`name`, `address`, `postalplace`, `country`,`bilde`, `products`, `longitude`, `latitude`, `last_updated`, `formatted_address`, `geocoding`) VALUES("'.$k.'", "'.$v['0'].'", "'.$v['1'].'", "'.$v['2'].'", "'.$bilde.'", "'.$products.'", "'.$longitude.'", "'.$latitude.'", "'.$last_updated.'", "'.$formatted_address.'", "'.$geocoding.'")';
+    $sqls[] = 'INSERT INTO '.$table_name.'(`name`, `address`, `postalplace`, `country`,`bilde`, `products`, `longitude`, `latitude`, `last_updated`, `formatted_address`, `geocoding`) VALUES("'.$k.'", "'.$v['0'].'", "'.$v['1'].'", "'.$v['2'].'", "'.$v['3'].'", "'.$products.'", "'.$longitude.'", "'.$latitude.'", "'.$last_updated.'", "'.$formatted_address.'", "'.$geocoding.'")';
   }  
 
 ?>
