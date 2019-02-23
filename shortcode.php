@@ -151,9 +151,9 @@ function outlet_locator_frontend_map() {
     
     $search   = get_option('url_replace');
     $search   = explode(PHP_EOL, $search);
-    $prod     = explode(",",$data->products);
+    $bilde = $data->bilde;
     
-    $products = "";
+    $products = $data->products;
     foreach($prod as $k=>$v) {
       $match = false;
       foreach($search as $line) {
@@ -162,7 +162,7 @@ function outlet_locator_frontend_map() {
           $url = trim($line[2]);
           $name = trim($line[1]);
           
-          $products .= $name." - <a href='".$url."'>Les mer</a><br />";
+          
           $match = true;
           break;
         }
@@ -170,7 +170,7 @@ function outlet_locator_frontend_map() {
       if($match == false) $products .= $v."<br />";
     }
 ?>
-    markers.push(createMarker({lat: <?php echo $data->latitude; ?>, lng: <?php echo $data->longitude; ?>}, "<?php echo $name; ?>", "<?php echo $image; ?>", "<?php echo $products; ?>", "<?php echo $address; ?>"));
+    markers.push(createMarker({lat: <?php echo $data->latitude; ?>, lng: <?php echo $data->longitude; ?>}, "<?php echo $name; ?>", "<?php echo $image; ?>", "<?php echo $products; ?>", "<?php echo $address; ?>", "<?php echo $bilde; ?>"));
 <?php
   }
 ?>
@@ -195,25 +195,27 @@ function outlet_locator_frontend_map() {
     var markerCluster = new MarkerClusterer(map, markers, { gridSize: 30, styles: clusterStyles, maxZoom: 15 });      
   }
   
-function generateContent(title, products, address) {
+function generateContent(title,bilde,products,address) {
   return '<div class="ol_ip_header">'+title+'</div>'+
          '<hr class="ol_ip_hr" />'+
          '<div class="ol_ip_content">'+
-         '<h2>Produkter:</h2><p>'+products+
+	     '<img src="https://oiko.no/2019/dritforbanna/wp-content/uploads/2019/02/'+bilde+'">'+
+         '<p>'+products+
          '</p>'+
          '<h2>Butikkens adresse:</h2><p>'+address+'</p></div>';
 }
       
-function createMarker(pos, t, image, prods, addr) {
+function createMarker(pos, t, image, prods, addr, bilder) {
     var marker = new google.maps.Marker({ 
-        icon: '<?php echo plugins_url( 'images/pin_', __FILE__ ); ?>'+image+'.png',      
+        icon: '', 
+		bilde: bilder,
         position: pos, 
         title: t,
         products: prods,
         address: addr
     }); 
     google.maps.event.addListener(marker, 'click', function() { 
-      infowindow.setContent(generateContent(marker.title, marker.products, marker.address));
+      infowindow.setContent(generateContent(marker.title, marker.bilde, marker.products, marker.address));
       infowindow.open(map, marker);
     }); 
     return marker;  

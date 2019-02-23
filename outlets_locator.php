@@ -44,6 +44,7 @@ function my_plugin_create_db() {
   	`products` TEXT NOT NULL,
   	`views` SMALLINT(5) NOT NULL,
   	`clicks` SMALLINT(5) NOT NULL,
+	`bilde` VARCHAR(255) NOT NULL,
   	UNIQUE KEY id (id)
   ) $charset_collate;";
   
@@ -159,7 +160,7 @@ function ol_geolocate_outlet() {
   global $wpdb;
   $table_name = $wpdb->prefix . 'ol_outlets';
   
-  $sql = "SELECT id, name, address, postalplace, country FROM $table_name WHERE geocoding = '' LIMIT 5";
+  $sql = "SELECT id, name, bilde, address, postalplace, country FROM $table_name WHERE geocoding = '' LIMIT 5";
   $res = $wpdb->get_results($sql);
   
   $return = new stdClass();

@@ -4,10 +4,6 @@
 <?php
 $step = isset($_GET['step']) ? $_GET['step'] : 0;
 if(isset($_POST["submit"])) {
-  if($_FILES['ol_csv']['type'] != "text/csv") {
-    $error = '<div class="error notice"><p>Error: File is not an CSV. </p></div>';
-  }
-  else {
     $ul_dir = wp_upload_dir(); 
     $file = $ul_dir['basedir']."/ol_csv.csv";
     move_uploaded_file($_FILES['ol_csv']['tmp_name'], $file);
@@ -15,7 +11,6 @@ if(isset($_POST["submit"])) {
     $csv = explode(PHP_EOL, $str);
     $step = 1;
     $max = sizeof($csv);
-  }
 }
 
 if($step == 2) {
@@ -31,12 +26,13 @@ if($step == 2) {
 
 ?>
 
-<h2>Outlet Locator &raquo; Upload outlets CSV</h2>
+<h2>Utsalgssteder &raquo; Upload outlets CSV</h2>
 
 
 <div class="card">
 	<h2>Importent! Read this before continue</h2>
 	<p>When uploading CSV it is importent that it has the same structure as shown below.</p>
+	<p>Column 2 have to be "IMAGE"</p>
 	<p>Column 4 have to be "OUTLET NAME"</p>
 	<p>Column 7 have to be "PRODUCT NAME"</p>
 	<p>Column 10 have to be "ADDRESS"</p>
@@ -124,6 +120,7 @@ if($step == 2) {
     $data = str_getcsv($line, ";");
  
     $store = trim($data[3]);
+    $bilde = trim($data[1]);
     $address = trim($data[9]);
     $postalplace = trim($data[10]);
     $country = "Norway";
@@ -131,7 +128,7 @@ if($step == 2) {
     $product = trim($data[6]);
     if($dpack > 0) {
       if(!isset($outlets_with_sales[$store]))
-        $outlets_with_sales[$store] = array($address, $postalplace, $country, array($product=>$dpack));
+        $outlets_with_sales[$store] = array($bilde, $address, $postalplace, $country, array($product=>$dpack));
       else 
         $outlets_with_sales[$store][3][$product] = $dpack;
     }
@@ -142,6 +139,7 @@ if($step == 2) {
   $sqls = array();
   foreach($outlets_with_sales as $k=>$v) {
     $products = "";
+	$bilde = trim($data[1]);
     foreach($v[3] as $prod=>$dpak) $products .= $prod.",";
     $products = substr($products,0,-1);      
 
@@ -158,7 +156,7 @@ if($step == 2) {
     }
     
     // Generate SQL and query
-    $sqls[] = 'INSERT INTO '.$table_name.'(`name`, `address`, `postalplace`, `country`, `products`, `longitude`, `latitude`, `last_updated`, `formatted_address`, `geocoding`) VALUES("'.$k.'", "'.$v['0'].'", "'.$v['1'].'", "'.$v['2'].'", "'.$products.'", "'.$longitude.'", "'.$latitude.'", "'.$last_updated.'", "'.$formatted_address.'", "'.$geocoding.'")';
+    $sqls[] = 'INSERT INTO '.$table_name.'(`name`, `address`, `postalplace`, `country`,`bilde`, `products`, `longitude`, `latitude`, `last_updated`, `formatted_address`, `geocoding`) VALUES("'.$k.'", "'.$v['0'].'", "'.$v['1'].'", "'.$v['2'].'", "'.$bilde.'", "'.$products.'", "'.$longitude.'", "'.$latitude.'", "'.$last_updated.'", "'.$formatted_address.'", "'.$geocoding.'")';
   }  
 
 ?>
