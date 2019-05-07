@@ -33,6 +33,7 @@ if($step == 2) {
 	<h2>Importent! Read this before continue</h2>
 	<p>When uploading CSV it is importent that it has the same structure as shown below.</p>
 	<p>Column 2 have to be "IMAGE"</p>
+	<p>Column 3 have to be "LINK"</p>
 	<p>Column 4 have to be "OUTLET NAME"</p>
 	<p>Column 7 have to be "PRODUCT NAME"</p>
 	<p>Column 10 have to be "ADDRESS"</p>
@@ -119,8 +120,8 @@ if($step == 2) {
   foreach($csv as $line) {
     $data = str_getcsv($line, ";");
     $store = trim($data[3]);
-	  /* LINE 123 PRINTS CORRECT VALUE */
     $bilde = trim($data[1]);
+	$link = trim($data[2]);
     $address = trim($data[9]);
     $postalplace = trim($data[10]);
     $country = "Norway";
@@ -128,7 +129,7 @@ if($step == 2) {
     $product = trim($data[6]);
     if($dpack > 0) {
       if(!isset($outlets_with_sales[$store]))
-        $outlets_with_sales[$store] = array($address, $postalplace, $country, $bilde, array($product=>$dpack));
+        $outlets_with_sales[$store] = array($address, $postalplace, $country, $bilde, $link, array($product=>$dpack));
       else 
         $outlets_with_sales[$store][3][$product] = $dpack;
     }
@@ -139,8 +140,7 @@ if($step == 2) {
   $sqls = array();
   foreach($outlets_with_sales as $k=>$v) {
     $products = "";
-	print_r($v);
-    foreach($v[4] as $prod=>$dpak) $products .= $prod.",";
+    foreach($v[5] as $prod=>$dpak) $products .= $prod.",";
     $products = substr($products,0,-1);      
     $longitude = $latitude = $last_updated = $formatted_address = $geocoding = "";
 	
@@ -155,7 +155,7 @@ if($step == 2) {
     }
     
     // Generate SQL and query
-    $sqls[] = 'INSERT INTO '.$table_name.'(`name`, `address`, `postalplace`, `country`,`bilde`, `products`, `longitude`, `latitude`, `last_updated`, `formatted_address`, `geocoding`) VALUES("'.$k.'", "'.$v['0'].'", "'.$v['1'].'", "'.$v['2'].'", "'.$v['3'].'", "'.$products.'", "'.$longitude.'", "'.$latitude.'", "'.$last_updated.'", "'.$formatted_address.'", "'.$geocoding.'")';
+    $sqls[] = 'INSERT INTO '.$table_name.'(`name`, `address`, `postalplace`, `country`,`bilde`, `link`, `products`, `longitude`, `latitude`, `last_updated`, `formatted_address`, `geocoding`) VALUES("'.$k.'", "'.$v['0'].'", "'.$v['1'].'", "'.$v['2'].'", "'.$v['3'].'", "'.$v['4'].'", "'.$products.'", "'.$longitude.'", "'.$latitude.'", "'.$last_updated.'", "'.$formatted_address.'", "'.$geocoding.'")';
   }  
 
 ?>
