@@ -81,7 +81,7 @@ function outlet_locator_frontend() {
         map.fitBounds(bounds);
         
       }else if(json.status == "no_stores_close") {
-        alert("No stores within 5km of search result.");
+        alert("Ingen utsalgssteder innen 50 km radius");
       }else if(json.status == "no_results") {
         alert("No result on search, please refine your search!");
       }else {
@@ -152,6 +152,7 @@ function outlet_locator_frontend_map() {
     $search   = get_option('url_replace');
     $search   = explode(PHP_EOL, $search);
     $bilde = $data->bilde;
+	$link = $data->link;
     
     $products = $data->products;
     foreach($prod as $k=>$v) {
@@ -170,7 +171,7 @@ function outlet_locator_frontend_map() {
       if($match == false) $products .= $v."<br />";
     }
 ?>
-    markers.push(createMarker({lat: <?php echo $data->latitude; ?>, lng: <?php echo $data->longitude; ?>}, "<?php echo $name; ?>", "<?php echo $image; ?>", "<?php echo $products; ?>", "<?php echo $address; ?>", "<?php echo $bilde; ?>"));
+    markers.push(createMarker({lat: <?php echo $data->latitude; ?>, lng: <?php echo $data->longitude; ?>}, "<?php echo $name; ?>", "<?php echo $image; ?>", "<?php echo $products; ?>", "<?php echo $address; ?>", "<?php echo $bilde; ?>", "<?php echo $link; ?>"));
 <?php
   }
 ?>
@@ -195,27 +196,29 @@ function outlet_locator_frontend_map() {
     var markerCluster = new MarkerClusterer(map, markers, { gridSize: 30, styles: clusterStyles, maxZoom: 15 });      
   }
   
-function generateContent(title,bilde,products,address) {
+function generateContent(title,bilde,link,products,address) {
   return '<div class="ol_ip_header">'+title+'</div>'+
          '<hr class="ol_ip_hr" />'+
          '<div class="ol_ip_content">'+
-	     '<img src="https://oiko.no/2019/dritforbanna/wp-content/uploads/2019/02/'+bilde+'">'+
+	     '<img src="https://dritforbanna.no/wp-content/uploads/'+bilde+'">'+
          '<p>'+products+
          '</p>'+
-         '<h2>Butikkens adresse:</h2><p>'+address+'</p></div>';
+         '<h2>Butikkens adresse:</h2><p>'+address+'</p></div>'+
+	  	 '<a href="'+link+'" target="_blank">Gå til butikk<a/>';
 }
       
-function createMarker(pos, t, image, prods, addr, bilder) {
+function createMarker(pos, t, image, prods, addr, bilder, link) {
     var marker = new google.maps.Marker({ 
         icon: '', 
 		bilde: bilder,
+		link: link,
         position: pos, 
         title: t,
         products: prods,
         address: addr
     }); 
     google.maps.event.addListener(marker, 'click', function() { 
-      infowindow.setContent(generateContent(marker.title, marker.bilde, marker.products, marker.address));
+      infowindow.setContent(generateContent(marker.title, marker.bilde, marker.link , marker.products, marker.address));
       infowindow.open(map, marker);
     }); 
     return marker;  
