@@ -45,6 +45,7 @@ function my_plugin_create_db() {
   	`views` SMALLINT(5) NOT NULL,
   	`clicks` SMALLINT(5) NOT NULL,
 	`bilde` VARCHAR(255) NOT NULL,
+	`link` VARCHAR(255) NOT NULL,
   	UNIQUE KEY id (id)
   ) $charset_collate;";
   
@@ -255,7 +256,7 @@ function ol_map_search() {
       $return->latitude = $res[0]->latitude;
       $return->longitude = $res[0]->longitude;
       
-      if($res[0]->distance_in_km < 5) {      
+      if($res[0]->distance_in_km < 50) {      
         if($best_match == false) $best_match = $res;
         else if($best_match[0]->distance_in_km > $res[0]->distance_in_km) $best_match = $res;
       }
@@ -269,7 +270,7 @@ function ol_map_search() {
       $return->match = array();
       
       foreach($best_match as $match) {
-        if($match->distance_in_km < 5) $return->match[] = $match;
+        if($match->distance_in_km < 20) $return->match[] = $match;
       }
       
     }
@@ -310,15 +311,4 @@ function outlet_locator_settings_init() {
 	register_setting( 'outlet_locator_settings', 'google_api_key' );
 	register_setting( 'outlet_locator_settings', 'url_replace' );
 }
-
-
-
-
-
-
-
-
-
-
-
 
